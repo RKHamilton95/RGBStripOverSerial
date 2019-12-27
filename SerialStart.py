@@ -19,7 +19,6 @@ Serial = init()
 
 
 def main():
-    GUI.buildWindow()
     print('Initiating Port Connection')
 
 
