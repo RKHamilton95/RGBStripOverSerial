@@ -1,3 +1,4 @@
+from tkinter.colorchooser import *
 from tkinter import *
 from SerialStart import writeCommands
 
@@ -22,12 +23,6 @@ def clickedDarker():
     writeCommands("DARKER\n")
 
 
-def clickedSolid():
-    writeCommands("SOLID\n")
-    print(optionVar.get())
-    writeCommands(optionVar.get()+"\n")
-
-
 def clickedRainbow():
     writeCommands("RAINBOW\n")
 
@@ -36,29 +31,46 @@ def closeConnect():
     writeCommands("CLOSE")
 
 
+def getColor():
+    color = askcolor()
+    print(color)
+    writeCommands("SOLID\n")
+    print(str(str(color[0][0]) + " " + str(color[0][1]) +
+              " " + str(color[0][2])) + '\n')
+    writeCommands(
+        str(str(color[0][0]) + " " + str(color[0][1]) +
+            " " + str(color[0][2])) + '\n')
+
+
 window = Tk()
-optionVar = StringVar(window)
-optionVar.set("RED")
-window.geometry('300x300')
+window.geometry('350x350')
 window.title("RGB Backlight")
+image = PhotoImage(
+    file="./images/checkitoutwithstevebrule.logo.png")
+background_label = Label(window, image=image)
+background_label.place(x=0, y=0, relwidth=1, relheight=1)
 window.configure(background='white')
-lbl = Label(text="RGB Backlight Control", font=(
-    "Comic Sans", 16), bg='white', justify=CENTER)
-lbl.grid(column=1, row=0)
+lbl = Label(text="RGB Backlight Controls", font=(
+    "Comic Sans", 14))
+lbl.grid(column=0, row=0)
 btn = Button(window, text="ON", bg="green", command=clickedOn, width=10)
-btn.grid(column=1, row=1)
+btn.grid(column=0, row=1)
 btn = Button(window, text="OFF", bg="red", command=clickedOff, width=10)
-btn.grid(column=1, row=2)
-w = OptionMenu(window, optionVar, *colors)
-w.grid(column=1, row=3)
-btn = Button(window, text="Set Color", command=clickedSolid, width=10)
-btn.grid(column=1, row=4)
+btn.grid(column=1, row=1)
+lbl = Label(text="Change Color", font=(
+    "Comic Sans", 12))
+lbl.grid(column=0, row=3)
+btn = Button(text='Select Color', command=getColor)
+btn.grid(column=0, row=4)
+# btn = Button(window, text="Set Color", command=clickedSolid, width=10)
+# btn.grid(column=0, row=5)
 btn = Button(window, text="BRIGHTER", command=clickedBrighter, width=10)
-btn.grid(column=1, row=5)
+btn.grid(column=1, row=3)
 btn = Button(window, text="DARKER", command=clickedDarker, width=10)
-btn.grid(column=1, row=6)
-btn = Button(window, text="CLOSE", command=closeConnect, width=10)
-btn.grid(column=1, row=7)
-btn = Button(window, text="RAINBOW", command=clickedRainbow, width=10)
-btn.grid(column=1, row=8)
+btn.grid(column=1, row=4)
+# btn = Button(window, text="CLOSE", command=closeConnect, width=10)
+# btn.grid(column=2, row=4)
+# btn = Button(window, text="RAINBOW", command=clickedRainbow, width=10)
+# btn.grid(column=2, row=3)
+mainloop()
 window.mainloop()

@@ -54,17 +54,6 @@ unsigned int EEPROMReadInt(int p_address)
   return ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
 }
 
-//-----------------COLORS-----------------
-uint32_t red = LEDS.Color(251, 13, 5);
-uint32_t orange = LEDS.Color(251, 115, 5);
-uint32_t yellow = LEDS.Color(251, 244, 5);
-uint32_t green = LEDS.Color(26, 251, 5);
-uint32_t lightblue = LEDS.Color(5, 208, 251);
-uint32_t blue = LEDS.Color(1, 35, 224);
-uint32_t indigo = LEDS.Color(92, 0, 147);
-uint32_t violet = LEDS.Color(224, 1, 176);
-uint32_t violet2 = LEDS.Color(251, 5, 189);
-uint32_t white = LEDS.Color(255, 255, 255);
 //Globals
 uint32_t CURRENT_COLOR = EEPROMReadlong(1);
 int CURRENT_BRIGHTNESS = EEPROMReadInt(20);
@@ -76,7 +65,8 @@ void setup()
   Serial.begin(9600);
   LEDS.begin();
   LEDS.setBrightness(CURRENT_BRIGHTNESS);
-  for (int i = 0; i < NUMPIXELS; i++) {
+  for (int i = 0; i < NUMPIXELS; i++)
+  {
     LEDS.setPixelColor(i, CURRENT_COLOR);
   }
   LEDS.show();
@@ -106,46 +96,51 @@ void inputToOutput()
   {
     SOLID(Serial.readStringUntil('\n'));
   }
-  else if (command == "BRIGHTER") {
+  else if (command == "BRIGHTER")
+  {
     BRIGHTER();
   }
-  else if (command == "DARKER") {
+  else if (command == "DARKER")
+  {
     DARKER();
   }
 }
 
-
-
-void ON() {
-  if (CURRENT_BRIGHTNESS == 0) {
-    LEDS.setBrightness(10);
-    CURRENT_BRIGHTNESS = LEDS.getBrightness();
-    EEPROMWriteInt(20, CURRENT_BRIGHTNESS);
+void ON()
+{
+  if (LEDS.getBrightness() == 0)
+  {
+    LEDS.setBrightness(EEPROMReadInt(20));
+    for (int i = 0; i < NUMPIXELS; i++)
+    {
+      LEDS.setPixelColor(i, CURRENT_COLOR);
+    }
+      LEDS.show();
   }
-  for (int i = 0; i < NUMPIXELS; i++) {
-    LEDS.setPixelColor(i, CURRENT_COLOR);
-  }
-  LEDS.show();
 }
 
-void OFF() {
+void OFF()
+{
   LEDS.setBrightness(0);
-  CURRENT_BRIGHTNESS = LEDS.getBrightness();
-  EEPROMWriteInt(20, CURRENT_BRIGHTNESS);
+//  CURRENT_BRIGHTNESS = LEDS.getBrightness();
+//  EEPROMWriteInt(20, CURRENT_BRIGHTNESS);
   LEDS.show();
 }
 
-void SOLID(String color) {
-  uint32_t colorVar = stringToColor(color);
+void SOLID(String color)
+{
+  uint32_t colorVar = parseColorString(color);
   writeColorToEEPROM(color);
   CURRENT_COLOR = colorVar;
-  for (int i = 0; i < NUMPIXELS; i++) {
+  for (int i = 0; i < NUMPIXELS; i++)
+  {
     LEDS.setPixelColor(i, colorVar);
   }
   LEDS.show();
 }
 
-void BRIGHTER() {
+void BRIGHTER()
+{
   if (LEDS.getBrightness() + 10 < 255)
   {
     LEDS.setBrightness(LEDS.getBrightness() + 10);
@@ -166,34 +161,17 @@ void DARKER()
   LEDS.show();
 }
 
-uint32_t stringToColor(String color)
+void writeColorToEEPROM(String color)
 {
-  if (color == "RED") {
-    return red;
-  }
-  else if (color == "ORANGE") {
-    return orange;
-  }
-  else if (color == "YELLOW") {
-    return yellow;
-  }
-  else if (color == "GREEN") {
-    return green;
-  }
-  else if (color == "LIGHTBLUE") {
-    return lightblue;
-  }
-  else if (color == "BLUE") {
-    return blue;
-  }
-  else if (color == "INDIGO") {
-    return indigo;
-  }
-  else if (color == "WHITE") {
-    return white;
-  }
+  EEPROMWritelong(1, parseColorString(color));
 }
 
-void writeColorToEEPROM(String color) {
-  EEPROMWritelong(1, stringToColor(color));
+uint32_t parseColorString(String color)
+{
+  char str[100];
+  color.toCharArray(str,100);
+  float Red = atoi(strtok(str," "));
+  float Green = atoi(strtok(NULL," "));
+  float Blue = atoi(strtok(NULL," "));
+  return LEDS.Color(Red,Green,Blue);
 }
