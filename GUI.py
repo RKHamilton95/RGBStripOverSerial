@@ -45,7 +45,13 @@ def getColor():
                 " " + str(color[0][2])) + '\n')
 
 
+def catchOnClose():
+    clickedOff()
+    window.destroy()
+
+
 window = Tk()
+window.protocol('WM_DELETE_WINDOW', catchOnClose)
 window.geometry('350x350')
 window.title("RGB Backlight")
 image = PhotoImage(
