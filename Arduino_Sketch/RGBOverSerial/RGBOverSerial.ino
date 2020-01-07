@@ -2,9 +2,11 @@
 #include <EEPROM.h>
 String COMMANDSTATE = "ON";
 #define PIN 7 //This is the Digital Pin the RGB LEDs will be connected too
-#define NUMPIXELS 16
+#define STARTPIXELS 0
+#define NUMPIXELS 65
+#define ENDPIXELS 150
 //LED STRIP
-Adafruit_NeoPixel LEDS = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel LEDS = Adafruit_NeoPixel(150, PIN, NEO_GRB + NEO_KHZ800);
 
 //EEPROM FUNCTIONS
 void EEPROMWritelong(int address, long value)
@@ -65,9 +67,10 @@ void setup()
   Serial.begin(9600);
   LEDS.begin();
   LEDS.setBrightness(CURRENT_BRIGHTNESS);
-  for (int i = 0; i < NUMPIXELS; i++)
+  for(int i = 0; i < NUMPIXELS; i++)
   {
     LEDS.setPixelColor(i, CURRENT_COLOR);
+
   }
   LEDS.show();
 }
