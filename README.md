@@ -11,7 +11,7 @@
 		Change the COM port to that of your Arduino the program is currently hardcoded to COM4. 
 		Run compileToExe.sh in the root directory to compile it. (The exe will be located in the dist folder)
 
-####GUI Builder
+#### GUI Builder
 ###### GUI Created with Tkinter and Page:
 	Download: https://sourceforge.net/projects/page/
 ###### Help: 
