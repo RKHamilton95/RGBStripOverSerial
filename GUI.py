@@ -138,7 +138,7 @@ def catchOnClose():
 
 
 window = Tk()
-#window.protocol('WM_DELETE_WINDOW', catchOnClose)
+window.protocol('WM_DELETE_WINDOW', catchOnClose)
 window.geometry('350x350')
 window.title("RGB Backlight")
 image = PhotoImage(
