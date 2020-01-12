@@ -12,7 +12,7 @@
 		Run compileToExe.sh in the root directory to compile it. (The exe will be located in the dist folder)
 
 #### GUI Builder
-###### GUI Created with Tkinter and Page:
-	Download: https://sourceforge.net/projects/page/
-###### Help: 
-	wish.exe not found error fix: https://sourceforge.net/p/page/discussion/general/thread/eddb6d59/?limit=25
+- ###### GUI Created with Tkinter and Page:
+		Download: https://sourceforge.net/projects/page/
+- ###### Help: 
+		wish.exe not found error fix: https://sourceforge.net/p/page/discussion/general/thread/eddb6d59/?limit=25
