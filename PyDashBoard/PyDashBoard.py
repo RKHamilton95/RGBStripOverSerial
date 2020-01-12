@@ -8,6 +8,7 @@ from SerialWrapper import SerialWrapper
 from tkinter.colorchooser import *
 from tkinter import *
 import webbrowser
+import atexit
 
 try:
     import Tkinter as tk
@@ -24,7 +25,6 @@ except ImportError:
 import GUI_Support
 import os.path
 
-
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
     global val, w, root
@@ -37,31 +37,11 @@ def vp_start_gui():
     root.mainloop()
 
 
-w = None
-
-
-def create_GUI(root, *args, **kwargs):
-    '''Starting point when module is imported by another program.'''
-    global w, w_win, rt
-    global prog_location
-    prog_call = sys.argv[0]
-    prog_location = os.path.split(prog_call)[0]
-    rt = root
-    w = tk.Toplevel(root)
-    top = GUI(w)
-    GUI_Support.init(w, top, *args, **kwargs)
-    return (w, top)
-
-
-def destroy_GUI():
-    global w
-    w.clickedOff()
-    w.destroy()
-    w = None
-
-
 class GUI():
-    ser = SerialWrapper('/COM4', 9600)
+    try:
+        ser = SerialWrapper('/COM4', 9600)
+    except:
+        print("Error Connecting to Serial")
 
     def __init__(self, top=None):
         ####################################################
@@ -95,28 +75,25 @@ class GUI():
         top.configure(menu=self.menubar)
         ####################################################
         #                Frame Creation                    #
-        ####################################################
-        self.TFrame1 = ttk.Frame(top)
+        self.TFrame1 = ttk.Frame(top)                      #
         self.TFrame1.place(relx=0.349, rely=0.561, relheight=0.412
-                , relwidth=0.59)
-        self.TFrame1.configure(relief='raised')
-        self.TFrame1.configure(borderwidth="2")
-        self.TFrame1.configure(relief="raised")
-        self.TFrame1.configure(takefocus="0")
-        self.TFrame2 = ttk.Frame(top)
+                , relwidth=0.59)                           #
+        self.TFrame1.configure(relief='raised')            #
+        self.TFrame1.configure(borderwidth="2")            #
+        self.TFrame1.configure(relief="raised")            #
+        self.TFrame1.configure(takefocus="0")              #
+        self.TFrame2 = ttk.Frame(top)                      #
         self.TFrame2.place(relx=0.015, rely=0.557, relheight=0.412
-                , relwidth=0.298)
-        self.TFrame2.configure(relief='raised')
-        self.TFrame2.configure(borderwidth="2")
-        self.TFrame2.configure(relief="raised")
+                , relwidth=0.298)                          #
+        self.TFrame2.configure(relief='raised')            #
+        self.TFrame2.configure(borderwidth="2")            #
+        self.TFrame2.configure(relief="raised")            #
         ####################################################
         #                RGBBacklightCall                  #
-        ####################################################
-        self.RGBBacklightControlPanelButtons(top)
-        self.RGBBacklightLabels(top)
+        self.RGBBacklightControlPanelButtons(top)          #
+        self.RGBBacklightLabels(top)                       #
         ####################################################
         #                  Separators                      #
-        ####################################################
         self.TSeparator1 = ttk.Separator(top)
         self.TSeparator1.place(relx=0.32, rely=0.022, relheight=0.958)
         self.TSeparator1.configure(orient="vertical")
@@ -124,13 +101,14 @@ class GUI():
         self.TSeparator2.place(relx=0.015, rely=0.539, relwidth=0.917)
         ####################################################
         # Applications Buttons                             #
-        ####################################################
-        self.applicationsButtons(top)
+        self.applicationsButtons(top)                      #
         ####################################################
         #Volume Mixer Buttons                              #
+        self.volumeMixer(top)                              #
         ####################################################
-        self.volumeMixer(top)
-
+        #Register Script Exit                              #
+        atexit.register(self.clickedOff)                   #
+        ####################################################
         self.mediaButtons()
 
     def clickedOn(self):
@@ -138,7 +116,7 @@ class GUI():
 
     def clickedOff(self):
         self.ser.writeCommands("OFF\n")
-
+        
     def clickedBrighter(self):
         self.ser.writeCommands("BRIGHTER\n")
 

@@ -28,9 +28,10 @@ def init(top, gui, *args, **kwargs):
     root = top
 
 
-def destroy_window():
+def destroy_window(gui):
     # Function which closes the window.
     global top_level
+    gui.clickedOff()
     top_level.destroy()
     top_level = None
 
