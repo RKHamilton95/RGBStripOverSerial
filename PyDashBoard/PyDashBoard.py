@@ -24,6 +24,7 @@ except ImportError:
 import GUI_Support
 import os.path
 
+
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
     global val, w, root
@@ -35,7 +36,10 @@ def vp_start_gui():
     GUI_Support.init(root, top)
     root.mainloop()
 
+
 w = None
+
+
 def create_GUI(root, *args, **kwargs):
     '''Starting point when module is imported by another program.'''
     global w, w_win, rt
@@ -48,31 +52,34 @@ def create_GUI(root, *args, **kwargs):
     GUI_Support.init(w, top, *args, **kwargs)
     return (w, top)
 
+
 def destroy_GUI():
     global w
     w.clickedOff()
     w.destroy()
     w = None
 
+
 class GUI():
     ser = SerialWrapper('/COM4', 9600)
 
     def __init__(self, top=None):
-        '''This class configures and populates the toplevel window.
-           top is the toplevel containing window.'''
+        ####################################################
+        #                   Initialization                 #
+        ####################################################
         _bgcolor = '#d9d9d9'  # X11 color: 'gray85'
         _fgcolor = '#000000'  # X11 color: 'black'
-        _compcolor = '#d9d9d9' # X11 color: 'gray85'
-        _ana1color = '#d9d9d9' # X11 color: 'gray85'
-        _ana2color = '#ececec' # Closest X11 color: 'gray92'
+        _compcolor = '#d9d9d9'  # X11 color: 'gray85'
+        _ana1color = '#d9d9d9'  # X11 color: 'gray85'
+        _ana2color = '#ececec'  # Closest X11 color: 'gray92'
         self.style = ttk.Style()
         if sys.platform == "win32":
             self.style.theme_use('winnative')
-        self.style.configure('.',background=_bgcolor)
-        self.style.configure('.',foreground=_fgcolor)
-        self.style.configure('.',font="TkDefaultFont")
-        self.style.map('.',background=
-            [('selected', _compcolor), ('active',_ana2color)])
+        self.style.configure('.', background=_bgcolor)
+        self.style.configure('.', foreground=_fgcolor)
+        self.style.configure('.', font="TkDefaultFont")
+        self.style.map('.', background=[
+                       ('selected', _compcolor), ('active', _ana2color)])
 
         top.geometry("687x449+1253+589")
         top.minsize(120, 1)
@@ -82,47 +89,13 @@ class GUI():
         top.configure(background="#2C2F33")
         top.configure(highlightbackground="#c0c0c0")
         top.configure(highlightcolor="black")
-
-        self.menubar = tk.Menu(top,font="TkMenuFont",bg=_bgcolor,fg='#bcbcbc')
-        top.configure(menu = self.menubar)
-        #RGBBacklightCall
-        self.RGBBacklightControlPanelButtons(top)
-        self.RGBBacklightLabels(top)
-        self.SteamBtn = tk.Button(top)
-        self.SteamBtn.place(relx=0.408, rely=0.178, height=64, width=64)
-        self.SteamBtn.configure(activebackground="#2C2F33")
-        self.SteamBtn.configure(activeforeground="white")
-        self.SteamBtn.configure(activeforeground="#2C2F33")
-        self.SteamBtn.configure(background="#2C2F33")
-        self.SteamBtn.configure(cursor="hand2")
-        self.SteamBtn.configure(disabledforeground="#a3a3a3")
-        self.SteamBtn.configure(foreground="#000000")
-        self.SteamBtn.configure(highlightbackground="#d9d9d9")
-        self.SteamBtn.configure(highlightcolor="black")
-        photo_location = os.path.join(prog_location,"/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
-        global _img0
-        _img0 = tk.PhotoImage(file=photo_location)
-        self.SteamBtn.configure(image=_img0)
-        self.SteamBtn.configure(padx="0")
-        self.SteamBtn.configure(pady="0")
-        self.SteamBtn.configure(relief="flat")
-
-        self.TSeparator1 = ttk.Separator(top)
-        self.TSeparator1.place(relx=0.32, rely=0.022, relheight=0.958)
-        self.TSeparator1.configure(orient="vertical")
-
-        self.TSeparator2 = ttk.Separator(top)
-        self.TSeparator2.place(relx=0.015, rely=0.539, relwidth=0.917)
         
-        #Applications Buttons
-        self.applicationsButtons(top)
-
-        self.TScale2 = ttk.Scale(top, from_=0, to=1.0)
-        self.TScale2.place(relx=0.079, rely=0.383, relwidth=0.146, relheight=0.0
-                , height=26, bordermode='ignore')
-        self.TScale2.configure(length="255")
-        self.TScale2.configure(takefocus="")
-
+        self.menubar = tk.Menu(top, font="TkMenuFont",
+                               bg=_bgcolor, fg='#bcbcbc')
+        top.configure(menu=self.menubar)
+        ####################################################
+        #                Frame Creation                    #
+        ####################################################
         self.TFrame1 = ttk.Frame(top)
         self.TFrame1.place(relx=0.349, rely=0.561, relheight=0.412
                 , relwidth=0.59)
@@ -130,7 +103,181 @@ class GUI():
         self.TFrame1.configure(borderwidth="2")
         self.TFrame1.configure(relief="raised")
         self.TFrame1.configure(takefocus="0")
+        self.TFrame2 = ttk.Frame(top)
+        self.TFrame2.place(relx=0.015, rely=0.557, relheight=0.412
+                , relwidth=0.298)
+        self.TFrame2.configure(relief='raised')
+        self.TFrame2.configure(borderwidth="2")
+        self.TFrame2.configure(relief="raised")
+        ####################################################
+        #                RGBBacklightCall                  #
+        ####################################################
+        self.RGBBacklightControlPanelButtons(top)
+        self.RGBBacklightLabels(top)
+        ####################################################
+        #                  Separators                      #
+        ####################################################
+        self.TSeparator1 = ttk.Separator(top)
+        self.TSeparator1.place(relx=0.32, rely=0.022, relheight=0.958)
+        self.TSeparator1.configure(orient="vertical")
+        self.TSeparator2 = ttk.Separator(top)
+        self.TSeparator2.place(relx=0.015, rely=0.539, relwidth=0.917)
+        ####################################################
+        # Applications Buttons                             #
+        ####################################################
+        self.applicationsButtons(top)
+        ####################################################
+        #Volume Mixer Buttons                              #
+        ####################################################
+        self.volumeMixer(top)
 
+        self.mediaButtons()
+
+    def clickedOn(self):
+        self.ser.writeCommands("ON\n")
+
+    def clickedOff(self):
+        self.ser.writeCommands("OFF\n")
+
+    def clickedBrighter(self):
+        self.ser.writeCommands("BRIGHTER\n")
+
+    def clickedDarker(self):
+        self.ser.writeCommands("DARKER\n")
+
+    def clickedRainbow(self):
+        self.ser.writeCommands("RAINBOW\n")
+
+    def closeConnect(self):
+        self.ser.writeCommands("CLOSE")
+
+    def openWebPage(self, url):
+        new = 2
+        webbrowser.open(url, new, autoraise=True)
+
+    def getColor(self):
+        color = askcolor()
+        print(color)
+        if color[0] != None:
+            self.ser.writeCommands("SOLID\n")
+            print(str(str(color[0][0]) + " " + str(color[0][1]) +
+                      " " + str(color[0][2])) + '\n')
+            self.ser.writeCommands(
+                str(str(color[0][0]) + " " + str(color[0][1]) +
+                    " " + str(color[0][2])) + '\n')
+
+    def RGBSection(self, top):
+        self.RGBBacklightControlPanelButtons(top)
+        self.RGBBacklightLabels(top)
+
+    def RGBBacklightLabels(self, top):
+        self.BrightnessLbl = tk.Label(top)
+        self.BrightnessLbl.place(relx=0.07, rely=0.318, height=21, width=114)
+        self.BrightnessLbl.configure(activebackground="#f9f9f9")
+        self.BrightnessLbl.configure(activeforeground="black")
+        self.BrightnessLbl.configure(background="#d9d9d9")
+        self.BrightnessLbl.configure(disabledforeground="#a3a3a3")
+        self.BrightnessLbl.configure(
+            font="-family {Yu Gothic UI Semibold} -size 13 -weight bold")
+        self.BrightnessLbl.configure(foreground="#2C2F33")
+        self.BrightnessLbl.configure(highlightbackground="#d9d9d9")
+        self.BrightnessLbl.configure(highlightcolor="black")
+        self.BrightnessLbl.configure(text='''Brightness''')
+
+        self.BacklightLbl = tk.Label(top)
+        self.BacklightLbl.place(relx=0.044, rely=0.022, height=21, width=154)
+        self.BacklightLbl.configure(activebackground="#f9f9f9")
+        self.BacklightLbl.configure(activeforeground="black")
+        self.BacklightLbl.configure(background="#d9d9d9")
+        self.BacklightLbl.configure(disabledforeground="#a3a3a3")
+        self.BacklightLbl.configure(
+            font="-family {Yu Gothic UI Semibold} -size 13 -weight bold")
+        self.BacklightLbl.configure(foreground="#000000")
+        self.BacklightLbl.configure(highlightbackground="#d9d9d9")
+        self.BacklightLbl.configure(highlightcolor="#000000")
+        self.BacklightLbl.configure(text='''Backlight Control''')
+
+        self.SelectAColorLbl = tk.Label(top)
+        self.SelectAColorLbl.place(
+            relx=0.044, rely=0.178, height=21, width=154)
+        self.SelectAColorLbl.configure(activebackground="#f9f9f9")
+        self.SelectAColorLbl.configure(activeforeground="black")
+        self.SelectAColorLbl.configure(background="#d9d9d9")
+        self.SelectAColorLbl.configure(disabledforeground="#a3a3a3")
+        self.SelectAColorLbl.configure(
+            font="-family {Yu Gothic UI Semibold} -size 13 -weight bold")
+        self.SelectAColorLbl.configure(foreground="#000000")
+        self.SelectAColorLbl.configure(highlightbackground="#d9d9d9")
+        self.SelectAColorLbl.configure(highlightcolor="black")
+        self.SelectAColorLbl.configure(text='''Select A Color''')
+
+    def RGBBacklightControlPanelButtons(self, top):
+        self.OFFButton = tk.Button(top)
+        self.OFFButton.place(relx=0.159, rely=0.089, height=34, width=57)
+        self.OFFButton.configure(activebackground="#c60000")
+        self.OFFButton.configure(activeforeground="white")
+        self.OFFButton.configure(activeforeground="#000000")
+        self.OFFButton.configure(background="#c60000")
+        self.OFFButton.configure(disabledforeground="#a3a3a3")
+        self.OFFButton.configure(foreground="#000000")
+        self.OFFButton.configure(highlightbackground="#d9d9d9")
+        self.OFFButton.configure(highlightcolor="black")
+        self.OFFButton.configure(pady="0")
+        self.OFFButton.configure(command=self.clickedOff)
+        self.OFFButton.configure(text='''OFF''')
+
+        self.ONButton = tk.Button(top)
+        self.ONButton.place(relx=0.064, rely=0.089, height=34, width=57)
+        self.ONButton.configure(activebackground="#00e111")
+        self.ONButton.configure(activeforeground="black")
+        self.ONButton.configure(background="#00e111")
+        self.ONButton.configure(disabledforeground="#00e111")
+        self.ONButton.configure(foreground="#000000")
+        self.ONButton.configure(highlightbackground="#d9d9d9")
+        self.ONButton.configure(highlightcolor="black")
+        self.ONButton.configure(pady="0")
+        self.ONButton.configure(command=self.clickedOn)
+        self.ONButton.configure(text='''ON''')
+
+        self.SelectAColorBtn = tk.Button(top)
+        self.SelectAColorBtn.place(relx=0.087, rely=0.245, height=24, width=97)
+        self.SelectAColorBtn.configure(activebackground="#ececec")
+        self.SelectAColorBtn.configure(activeforeground="#000000")
+        self.SelectAColorBtn.configure(background="#d9d9d9")
+        self.SelectAColorBtn.configure(disabledforeground="#a3a3a3")
+        self.SelectAColorBtn.configure(foreground="#000000")
+        self.SelectAColorBtn.configure(highlightbackground="#d9d9d9")
+        self.SelectAColorBtn.configure(highlightcolor="black")
+        self.SelectAColorBtn.configure(pady="0")
+        self.SelectAColorBtn.configure(command=self.getColor)
+        self.SelectAColorBtn.configure(text='''Select a color''')
+
+        self.SetBrightnessBtn = tk.Button(top)
+        self.SetBrightnessBtn.place(
+            relx=0.087, rely=0.448, height=24, width=87)
+        self.SetBrightnessBtn.configure(activebackground="#ececec")
+        self.SetBrightnessBtn.configure(activeforeground="#000000")
+        self.SetBrightnessBtn.configure(background="#d9d9d9")
+        self.SetBrightnessBtn.configure(disabledforeground="#a3a3a3")
+        self.SetBrightnessBtn.configure(foreground="#000000")
+        self.SetBrightnessBtn.configure(highlightbackground="#d9d9d9")
+        self.SetBrightnessBtn.configure(highlightcolor="black")
+        self.SetBrightnessBtn.configure(pady="0")
+        self.SetBrightnessBtn.configure(command=self.clickedBrighter)
+        self.SetBrightnessBtn.configure(text='''Set Brightness''')
+
+        self.TScale2 = ttk.Scale(top, from_=0, to=1.0)
+        self.TScale2.place(relx=0.079, rely=0.383, relwidth=0.146, relheight=0.0
+                , height=26, bordermode='ignore')
+        self.TScale2.configure(length="255")
+        self.TScale2.configure(takefocus="")
+
+    def volumeMixer(self,top):
+        self.volumeBars(top)
+        self.volumeMixerBtns(top)
+        self.volumeMixerHeader()
+
+    def volumeBars(self,top):
         self.TScale1_21 = ttk.Scale(self.TFrame1, from_=0, to=1.0)
         self.TScale1_21.place(relx=0.328, rely=0.054, relwidth=0.0
                 , relheight=0.703, width=35, bordermode='ignore')
@@ -173,6 +320,7 @@ class GUI():
         self.TScale1_23.configure(orient="vertical")
         self.TScale1_23.configure(takefocus="")
 
+    def volumeMixerBtns(self,top):
         self.Button1 = tk.Button(self.TFrame1)
         self.Button1.place(relx=0.067, rely=0.778, height=34, width=37)
         self.Button1.configure(activebackground="#ececec")
@@ -257,25 +405,7 @@ class GUI():
         self.Button1_14.configure(pady="0")
         self.Button1_14.configure(text='''Button''')
 
-        self.SetBrightnessBtn = tk.Button(top)
-        self.SetBrightnessBtn.place(relx=0.087, rely=0.448, height=24, width=87)
-        self.SetBrightnessBtn.configure(activebackground="#ececec")
-        self.SetBrightnessBtn.configure(activeforeground="#000000")
-        self.SetBrightnessBtn.configure(background="#d9d9d9")
-        self.SetBrightnessBtn.configure(disabledforeground="#a3a3a3")
-        self.SetBrightnessBtn.configure(foreground="#000000")
-        self.SetBrightnessBtn.configure(highlightbackground="#d9d9d9")
-        self.SetBrightnessBtn.configure(highlightcolor="black")
-        self.SetBrightnessBtn.configure(pady="0")
-        self.SetBrightnessBtn.configure(text='''Set Brightness''')
-
-        self.TFrame2 = ttk.Frame(top)
-        self.TFrame2.place(relx=0.015, rely=0.557, relheight=0.412
-                , relwidth=0.298)
-        self.TFrame2.configure(relief='raised')
-        self.TFrame2.configure(borderwidth="2")
-        self.TFrame2.configure(relief="raised")
-
+    def volumeMixerHeader(self):
         self.BacklightLbl_11 = tk.Label(self.TFrame2)
         self.BacklightLbl_11.place(relx=0.0, rely=0.0, height=41, width=204)
         self.BacklightLbl_11.configure(activebackground="#f9f9f9")
@@ -288,6 +418,189 @@ class GUI():
         self.BacklightLbl_11.configure(highlightcolor="black")
         self.BacklightLbl_11.configure(text='''Media''')
 
+    def applicationsButtons(self, top):
+        self.SteamBtn = tk.Button(top)
+        self.SteamBtn.place(relx=0.408, rely=0.178, height=64, width=64)
+        self.SteamBtn.configure(activebackground="#2C2F33")
+        self.SteamBtn.configure(activeforeground="white")
+        self.SteamBtn.configure(activeforeground="#2C2F33")
+        self.SteamBtn.configure(background="#2C2F33")
+        self.SteamBtn.configure(cursor="hand2")
+        self.SteamBtn.configure(disabledforeground="#a3a3a3")
+        self.SteamBtn.configure(foreground="#000000")
+        self.SteamBtn.configure(highlightbackground="#d9d9d9")
+        self.SteamBtn.configure(highlightcolor="black")
+        photo_location = os.path.join(
+            prog_location, "/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
+        global _img0
+        _img0 = tk.PhotoImage(file=photo_location)
+        self.SteamBtn.configure(image=_img0)
+        self.SteamBtn.configure(padx="0")
+        self.SteamBtn.configure(pady="0")
+        self.SteamBtn.configure(relief="flat")
+
+        self.ApplicationsLbl = tk.Label(top)
+        self.ApplicationsLbl.place(relx=0.48, rely=0.022, height=41, width=204)
+        self.ApplicationsLbl.configure(activebackground="#f9f9f9")
+        self.ApplicationsLbl.configure(activeforeground="black")
+        self.ApplicationsLbl.configure(background="#d9d9d9")
+        self.ApplicationsLbl.configure(disabledforeground="#a3a3a3")
+        self.ApplicationsLbl.configure(
+            font="-family {Yu Gothic UI Semibold} -size 20 -weight bold")
+        self.ApplicationsLbl.configure(foreground="#000000")
+        self.ApplicationsLbl.configure(highlightbackground="#d9d9d9")
+        self.ApplicationsLbl.configure(highlightcolor="black")
+        self.ApplicationsLbl.configure(text='''Applications''')
+
+        self.OpenSteamBtn = tk.Button(top)
+        self.OpenSteamBtn.place(relx=0.757, rely=0.178, height=64, width=64)
+        self.OpenSteamBtn.configure(activebackground="#2C2F33")
+        self.OpenSteamBtn.configure(activeforeground="white")
+        self.OpenSteamBtn.configure(activeforeground="#2C2F33")
+        self.OpenSteamBtn.configure(background="#2C2F33")
+        self.OpenSteamBtn.configure(cursor="hand2")
+        self.OpenSteamBtn.configure(disabledforeground="#a3a3a3")
+        self.OpenSteamBtn.configure(foreground="#000000")
+        self.OpenSteamBtn.configure(highlightbackground="#d9d9d9")
+        self.OpenSteamBtn.configure(highlightcolor="black")
+        photo_location = os.path.join(
+            prog_location, "/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
+        global _img3
+        _img3 = tk.PhotoImage(file=photo_location)
+        self.OpenSteamBtn.configure(image=_img3)
+        self.OpenSteamBtn.configure(padx="0")
+        self.OpenSteamBtn.configure(pady="0")
+        self.OpenSteamBtn.configure(relief="flat")
+        self.OpenSteamBtn.configure(takefocus="0")
+        # self.OpensteamBtn.configure(command=)
+
+        self.OpenDiscordBtn = tk.Button(top)
+        self.OpenDiscordBtn.place(relx=0.524, rely=0.178, height=64, width=64)
+        self.OpenDiscordBtn.configure(activebackground="#2C2F33")
+        self.OpenDiscordBtn.configure(activeforeground="white")
+        self.OpenDiscordBtn.configure(activeforeground="#2C2F33")
+        self.OpenDiscordBtn.configure(background="#2C2F33")
+        self.OpenDiscordBtn.configure(cursor="hand2")
+        self.OpenDiscordBtn.configure(disabledforeground="#a3a3a3")
+        self.OpenDiscordBtn.configure(foreground="#000000")
+        self.OpenDiscordBtn.configure(highlightbackground="#d9d9d9")
+        self.OpenDiscordBtn.configure(highlightcolor="black")
+        photo_location = os.path.join(
+            prog_location, "/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/discord.png")
+        global _img1
+        _img1 = tk.PhotoImage(file=photo_location)
+        self.OpenDiscordBtn.configure(image=_img1)
+        self.OpenDiscordBtn.configure(padx="0")
+        self.OpenDiscordBtn.configure(pady="0")
+        self.OpenDiscordBtn.configure(relief="flat")
+        self.OpenDiscordBtn.configure(takefocus="0")
+
+        self.UndefinedButton = tk.Button(top)
+        self.UndefinedButton.place(relx=0.408, rely=0.334, height=64, width=64)
+        self.UndefinedButton.configure(activebackground="#2C2F33")
+        self.UndefinedButton.configure(activeforeground="white")
+        self.UndefinedButton.configure(activeforeground="#2C2F33")
+        self.UndefinedButton.configure(background="#2C2F33")
+        self.UndefinedButton.configure(cursor="hand2")
+        self.UndefinedButton.configure(disabledforeground="#a3a3a3")
+        self.UndefinedButton.configure(foreground="#000000")
+        self.UndefinedButton.configure(highlightbackground="#d9d9d9")
+        self.UndefinedButton.configure(highlightcolor="black")
+        photo_location = os.path.join(
+            prog_location, "/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
+        global _img4
+        _img4 = tk.PhotoImage(file=photo_location)
+        self.UndefinedButton.configure(image=_img4)
+        self.UndefinedButton.configure(padx="0")
+        self.UndefinedButton.configure(pady="0")
+        self.UndefinedButton.configure(relief="flat")
+        self.UndefinedButton.configure(takefocus="0")
+
+        self.SteamBtn_2 = tk.Button(top)
+        self.SteamBtn_2.place(relx=0.524, rely=0.334, height=64, width=64)
+        self.SteamBtn_2.configure(activebackground="#2C2F33")
+        self.SteamBtn_2.configure(activeforeground="white")
+        self.SteamBtn_2.configure(activeforeground="#2C2F33")
+        self.SteamBtn_2.configure(background="#2C2F33")
+        self.SteamBtn_2.configure(cursor="hand2")
+        self.SteamBtn_2.configure(disabledforeground="#a3a3a3")
+        self.SteamBtn_2.configure(foreground="#000000")
+        self.SteamBtn_2.configure(highlightbackground="#d9d9d9")
+        self.SteamBtn_2.configure(highlightcolor="black")
+        photo_location = os.path.join(
+            prog_location, "/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
+        global _img5
+        _img5 = tk.PhotoImage(file=photo_location)
+        self.SteamBtn_2.configure(image=_img5)
+        self.SteamBtn_2.configure(padx="0")
+        self.SteamBtn_2.configure(pady="0")
+        self.SteamBtn_2.configure(relief="flat")
+        self.SteamBtn_2.configure(takefocus="0")
+
+        self.SteamBtn_3 = tk.Button(top)
+        self.SteamBtn_3.place(relx=0.64, rely=0.334, height=64, width=64)
+        self.SteamBtn_3.configure(activebackground="#2C2F33")
+        self.SteamBtn_3.configure(activeforeground="white")
+        self.SteamBtn_3.configure(activeforeground="#2C2F33")
+        self.SteamBtn_3.configure(background="#2C2F33")
+        self.SteamBtn_3.configure(cursor="hand2")
+        self.SteamBtn_3.configure(disabledforeground="#a3a3a3")
+        self.SteamBtn_3.configure(foreground="#000000")
+        self.SteamBtn_3.configure(highlightbackground="#d9d9d9")
+        self.SteamBtn_3.configure(highlightcolor="black")
+        photo_location = os.path.join(
+            prog_location, "/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
+        global _img6
+        _img6 = tk.PhotoImage(file=photo_location)
+        self.SteamBtn_3.configure(image=_img6)
+        self.SteamBtn_3.configure(padx="0")
+        self.SteamBtn_3.configure(pady="0")
+        self.SteamBtn_3.configure(relief="flat")
+        self.SteamBtn_3.configure(takefocus="0")
+
+        self.SteamBtn_4 = tk.Button(top)
+        self.SteamBtn_4.place(relx=0.757, rely=0.334, height=64, width=64)
+        self.SteamBtn_4.configure(activebackground="#2C2F33")
+        self.SteamBtn_4.configure(activeforeground="white")
+        self.SteamBtn_4.configure(activeforeground="#2C2F33")
+        self.SteamBtn_4.configure(background="#2C2F33")
+        self.SteamBtn_4.configure(cursor="hand2")
+        self.SteamBtn_4.configure(disabledforeground="#a3a3a3")
+        self.SteamBtn_4.configure(foreground="#000000")
+        self.SteamBtn_4.configure(highlightbackground="#d9d9d9")
+        self.SteamBtn_4.configure(highlightcolor="black")
+        photo_location = os.path.join(
+            prog_location, "/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
+        global _img7
+        _img7 = tk.PhotoImage(file=photo_location)
+        self.SteamBtn_4.configure(image=_img7)
+        self.SteamBtn_4.configure(padx="0")
+        self.SteamBtn_4.configure(pady="0")
+        self.SteamBtn_4.configure(relief="flat")
+        self.SteamBtn_4.configure(takefocus="0")
+
+        self.SteamBtn_13 = tk.Button(top)
+        self.SteamBtn_13.place(relx=0.64, rely=0.178, height=64, width=64)
+        self.SteamBtn_13.configure(activebackground="#2C2F33")
+        self.SteamBtn_13.configure(activeforeground="white")
+        self.SteamBtn_13.configure(activeforeground="#2C2F33")
+        self.SteamBtn_13.configure(background="#2C2F33")
+        self.SteamBtn_13.configure(cursor="hand2")
+        self.SteamBtn_13.configure(disabledforeground="#a3a3a3")
+        self.SteamBtn_13.configure(foreground="#000000")
+        self.SteamBtn_13.configure(highlightbackground="#d9d9d9")
+        self.SteamBtn_13.configure(highlightcolor="black")
+        photo_location = os.path.join(
+            prog_location, "/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
+        global _img2
+        _img2 = tk.PhotoImage(file=photo_location)
+        self.SteamBtn_13.configure(image=_img2)
+        self.SteamBtn_13.configure(padx="0")
+        self.SteamBtn_13.configure(pady="0")
+        self.SteamBtn_13.configure(relief="flat")
+        self.SteamBtn_13.configure(takefocus="0")
+
+    def mediaButtons(self):
         self.SteamBtn_13 = tk.Button(self.TFrame2)
         self.SteamBtn_13.place(relx=0.049, rely=0.27, height=54, width=54)
         self.SteamBtn_13.configure(activebackground="#2C2F33")
@@ -401,278 +714,20 @@ class GUI():
         self.SteamBtn_18.configure(padx="0")
         self.SteamBtn_18.configure(pady="0")
         self.SteamBtn_18.configure(relief="flat")
-    
-    def clickedOn(self):
-        self.ser.writeCommands("ON\n")
 
-    def clickedOff(self):
-        self.ser.writeCommands("OFF\n")
-
-    def clickedBrighter(self):
-        self.ser.writeCommands("BRIGHTER\n")
-
-    def clickedDarker(self):
-        self.ser.writeCommands("DARKER\n")
-
-    def clickedRainbow(self):
-        self.ser.writeCommands("RAINBOW\n")
-
-    def closeConnect(self):
-        self.ser.writeCommands("CLOSE")
-
-    def openWebPage(self,url):  
-        new=2
-        webbrowser.open(url,new,autoraise=True)
-
-    def getColor(self):
-        color = askcolor()
-        print(color)
-        if color[0] != None:
-            self.ser.writeCommands("SOLID\n")
-            print(str(str(color[0][0]) + " " + str(color[0][1]) +
-                      " " + str(color[0][2])) + '\n')
-            self.ser.writeCommands(
-                str(str(color[0][0]) + " " + str(color[0][1]) +
-                    " " + str(color[0][2])) + '\n')
-
-
-    def RGBSection(self,top):
-        self.RGBBacklightControlPanelButtons(top)
-        self.RGBBacklightLabels(top)
-
-    def RGBBacklightLabels(self,top):
-        self.BrightnessLbl = tk.Label(top)
-        self.BrightnessLbl.place(relx=0.07, rely=0.318, height=21, width=114)
-        self.BrightnessLbl.configure(activebackground="#f9f9f9")
-        self.BrightnessLbl.configure(activeforeground="black")
-        self.BrightnessLbl.configure(background="#d9d9d9")
-        self.BrightnessLbl.configure(disabledforeground="#a3a3a3")
-        self.BrightnessLbl.configure(font="-family {Yu Gothic UI Semibold} -size 13 -weight bold")
-        self.BrightnessLbl.configure(foreground="#2C2F33")
-        self.BrightnessLbl.configure(highlightbackground="#d9d9d9")
-        self.BrightnessLbl.configure(highlightcolor="black")
-        self.BrightnessLbl.configure(text='''Brightness''')
-
-        self.BacklightLbl = tk.Label(top)
-        self.BacklightLbl.place(relx=0.044, rely=0.022, height=21, width=154)
-        self.BacklightLbl.configure(activebackground="#f9f9f9")
-        self.BacklightLbl.configure(activeforeground="black")
-        self.BacklightLbl.configure(background="#d9d9d9")
-        self.BacklightLbl.configure(disabledforeground="#a3a3a3")
-        self.BacklightLbl.configure(font="-family {Yu Gothic UI Semibold} -size 13 -weight bold")
-        self.BacklightLbl.configure(foreground="#000000")
-        self.BacklightLbl.configure(highlightbackground="#d9d9d9")
-        self.BacklightLbl.configure(highlightcolor="#000000")
-        self.BacklightLbl.configure(text='''Backlight Control''')
-
-        self.SelectAColorLbl = tk.Label(top)
-        self.SelectAColorLbl.place(relx=0.044, rely=0.178, height=21, width=154)
-        self.SelectAColorLbl.configure(activebackground="#f9f9f9")
-        self.SelectAColorLbl.configure(activeforeground="black")
-        self.SelectAColorLbl.configure(background="#d9d9d9")
-        self.SelectAColorLbl.configure(disabledforeground="#a3a3a3")
-        self.SelectAColorLbl.configure(font="-family {Yu Gothic UI Semibold} -size 13 -weight bold")
-        self.SelectAColorLbl.configure(foreground="#000000")
-        self.SelectAColorLbl.configure(highlightbackground="#d9d9d9")
-        self.SelectAColorLbl.configure(highlightcolor="black")
-        self.SelectAColorLbl.configure(text='''Select A Color''')
-
-    def RGBBacklightControlPanelButtons(self,top):
-        self.OFFButton = tk.Button(top)
-        self.OFFButton.place(relx=0.159, rely=0.089, height=34, width=57)
-        self.OFFButton.configure(activebackground="#c60000")
-        self.OFFButton.configure(activeforeground="white")
-        self.OFFButton.configure(activeforeground="#000000")
-        self.OFFButton.configure(background="#c60000")
-        self.OFFButton.configure(disabledforeground="#a3a3a3")
-        self.OFFButton.configure(foreground="#000000")
-        self.OFFButton.configure(highlightbackground="#d9d9d9")
-        self.OFFButton.configure(highlightcolor="black")
-        self.OFFButton.configure(pady="0")
-        self.OFFButton.configure(command=self.clickedOff)
-        self.OFFButton.configure(text='''OFF''')
-
-        self.ONButton = tk.Button(top)
-        self.ONButton.place(relx=0.064, rely=0.089, height=34, width=57)
-        self.ONButton.configure(activebackground="#00e111")
-        self.ONButton.configure(activeforeground="black")
-        self.ONButton.configure(background="#00e111")
-        self.ONButton.configure(disabledforeground="#00e111")
-        self.ONButton.configure(foreground="#000000")
-        self.ONButton.configure(highlightbackground="#d9d9d9")
-        self.ONButton.configure(highlightcolor="black")
-        self.ONButton.configure(pady="0")
-        self.ONButton.configure(command=self.clickedOn)
-        self.ONButton.configure(text='''ON''')
-
-        self.SelectAColorBtn = tk.Button(top)
-        self.SelectAColorBtn.place(relx=0.087, rely=0.245, height=24, width=97)
-        self.SelectAColorBtn.configure(activebackground="#ececec")
-        self.SelectAColorBtn.configure(activeforeground="#000000")
-        self.SelectAColorBtn.configure(background="#d9d9d9")
-        self.SelectAColorBtn.configure(disabledforeground="#a3a3a3")
-        self.SelectAColorBtn.configure(foreground="#000000")
-        self.SelectAColorBtn.configure(highlightbackground="#d9d9d9")
-        self.SelectAColorBtn.configure(highlightcolor="black")
-        self.SelectAColorBtn.configure(pady="0")
-        self.SelectAColorBtn.configure(command=self.getColor)
-        self.SelectAColorBtn.configure(text='''Select a color''')
-
-    def applicationsButtons(self,top):
-        self.ApplicationsLbl = tk.Label(top)
-        self.ApplicationsLbl.place(relx=0.48, rely=0.022, height=41, width=204)
-        self.ApplicationsLbl.configure(activebackground="#f9f9f9")
-        self.ApplicationsLbl.configure(activeforeground="black")
-        self.ApplicationsLbl.configure(background="#d9d9d9")
-        self.ApplicationsLbl.configure(disabledforeground="#a3a3a3")
-        self.ApplicationsLbl.configure(font="-family {Yu Gothic UI Semibold} -size 20 -weight bold")
-        self.ApplicationsLbl.configure(foreground="#000000")
-        self.ApplicationsLbl.configure(highlightbackground="#d9d9d9")
-        self.ApplicationsLbl.configure(highlightcolor="black")
-        self.ApplicationsLbl.configure(text='''Applications''')
-
-        self.OpenSteamBtn = tk.Button(top)
-        self.OpenSteamBtn.place(relx=0.757, rely=0.178, height=64, width=64)
-        self.OpenSteamBtn.configure(activebackground="#2C2F33")
-        self.OpenSteamBtn.configure(activeforeground="white")
-        self.OpenSteamBtn.configure(activeforeground="#2C2F33")
-        self.OpenSteamBtn.configure(background="#2C2F33")
-        self.OpenSteamBtn.configure(cursor="hand2")
-        self.OpenSteamBtn.configure(disabledforeground="#a3a3a3")
-        self.OpenSteamBtn.configure(foreground="#000000")
-        self.OpenSteamBtn.configure(highlightbackground="#d9d9d9")
-        self.OpenSteamBtn.configure(highlightcolor="black")
-        photo_location = os.path.join(prog_location,"/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
-        global _img3
-        _img3 = tk.PhotoImage(file=photo_location)
-        self.OpenSteamBtn.configure(image=_img3)
-        self.OpenSteamBtn.configure(padx="0")
-        self.OpenSteamBtn.configure(pady="0")
-        self.OpenSteamBtn.configure(relief="flat")
-        self.OpenSteamBtn.configure(takefocus="0")
-        #self.OpensteamBtn.configure(command=)
-
-        self.OpenDiscordBtn = tk.Button(top)
-        self.OpenDiscordBtn.place(relx=0.524, rely=0.178, height=64, width=64)
-        self.OpenDiscordBtn.configure(activebackground="#2C2F33")
-        self.OpenDiscordBtn.configure(activeforeground="white")
-        self.OpenDiscordBtn.configure(activeforeground="#2C2F33")
-        self.OpenDiscordBtn.configure(background="#2C2F33")
-        self.OpenDiscordBtn.configure(cursor="hand2")
-        self.OpenDiscordBtn.configure(disabledforeground="#a3a3a3")
-        self.OpenDiscordBtn.configure(foreground="#000000")
-        self.OpenDiscordBtn.configure(highlightbackground="#d9d9d9")
-        self.OpenDiscordBtn.configure(highlightcolor="black")
-        photo_location = os.path.join(prog_location,"/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/discord.png")
-        global _img1
-        _img1 = tk.PhotoImage(file=photo_location)
-        self.OpenDiscordBtn.configure(image=_img1)
-        self.OpenDiscordBtn.configure(padx="0")
-        self.OpenDiscordBtn.configure(pady="0")
-        self.OpenDiscordBtn.configure(relief="flat")
-        self.OpenDiscordBtn.configure(takefocus="0")
-
-        self.UndefinedButton = tk.Button(top)
-        self.UndefinedButton.place(relx=0.408, rely=0.334, height=64, width=64)
-        self.UndefinedButton.configure(activebackground="#2C2F33")
-        self.UndefinedButton.configure(activeforeground="white")
-        self.UndefinedButton.configure(activeforeground="#2C2F33")
-        self.UndefinedButton.configure(background="#2C2F33")
-        self.UndefinedButton.configure(cursor="hand2")
-        self.UndefinedButton.configure(disabledforeground="#a3a3a3")
-        self.UndefinedButton.configure(foreground="#000000")
-        self.UndefinedButton.configure(highlightbackground="#d9d9d9")
-        self.UndefinedButton.configure(highlightcolor="black")
-        photo_location = os.path.join(prog_location,"/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
-        global _img4
-        _img4 = tk.PhotoImage(file=photo_location)
-        self.UndefinedButton.configure(image=_img4)
-        self.UndefinedButton.configure(padx="0")
-        self.UndefinedButton.configure(pady="0")
-        self.UndefinedButton.configure(relief="flat")
-        self.UndefinedButton.configure(takefocus="0")
-
-        self.SteamBtn_2 = tk.Button(top)
-        self.SteamBtn_2.place(relx=0.524, rely=0.334, height=64, width=64)
-        self.SteamBtn_2.configure(activebackground="#2C2F33")
-        self.SteamBtn_2.configure(activeforeground="white")
-        self.SteamBtn_2.configure(activeforeground="#2C2F33")
-        self.SteamBtn_2.configure(background="#2C2F33")
-        self.SteamBtn_2.configure(cursor="hand2")
-        self.SteamBtn_2.configure(disabledforeground="#a3a3a3")
-        self.SteamBtn_2.configure(foreground="#000000")
-        self.SteamBtn_2.configure(highlightbackground="#d9d9d9")
-        self.SteamBtn_2.configure(highlightcolor="black")
-        photo_location = os.path.join(prog_location,"/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
-        global _img5
-        _img5 = tk.PhotoImage(file=photo_location)
-        self.SteamBtn_2.configure(image=_img5)
-        self.SteamBtn_2.configure(padx="0")
-        self.SteamBtn_2.configure(pady="0")
-        self.SteamBtn_2.configure(relief="flat")
-        self.SteamBtn_2.configure(takefocus="0")
-
-        self.SteamBtn_3 = tk.Button(top)
-        self.SteamBtn_3.place(relx=0.64, rely=0.334, height=64, width=64)
-        self.SteamBtn_3.configure(activebackground="#2C2F33")
-        self.SteamBtn_3.configure(activeforeground="white")
-        self.SteamBtn_3.configure(activeforeground="#2C2F33")
-        self.SteamBtn_3.configure(background="#2C2F33")
-        self.SteamBtn_3.configure(cursor="hand2")
-        self.SteamBtn_3.configure(disabledforeground="#a3a3a3")
-        self.SteamBtn_3.configure(foreground="#000000")
-        self.SteamBtn_3.configure(highlightbackground="#d9d9d9")
-        self.SteamBtn_3.configure(highlightcolor="black")
-        photo_location = os.path.join(prog_location,"/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
-        global _img6
-        _img6 = tk.PhotoImage(file=photo_location)
-        self.SteamBtn_3.configure(image=_img6)
-        self.SteamBtn_3.configure(padx="0")
-        self.SteamBtn_3.configure(pady="0")
-        self.SteamBtn_3.configure(relief="flat")
-        self.SteamBtn_3.configure(takefocus="0")
-
-        self.SteamBtn_4 = tk.Button(top)
-        self.SteamBtn_4.place(relx=0.757, rely=0.334, height=64, width=64)
-        self.SteamBtn_4.configure(activebackground="#2C2F33")
-        self.SteamBtn_4.configure(activeforeground="white")
-        self.SteamBtn_4.configure(activeforeground="#2C2F33")
-        self.SteamBtn_4.configure(background="#2C2F33")
-        self.SteamBtn_4.configure(cursor="hand2")
-        self.SteamBtn_4.configure(disabledforeground="#a3a3a3")
-        self.SteamBtn_4.configure(foreground="#000000")
-        self.SteamBtn_4.configure(highlightbackground="#d9d9d9")
-        self.SteamBtn_4.configure(highlightcolor="black")
-        photo_location = os.path.join(prog_location,"/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
-        global _img7
-        _img7 = tk.PhotoImage(file=photo_location)
-        self.SteamBtn_4.configure(image=_img7)
-        self.SteamBtn_4.configure(padx="0")
-        self.SteamBtn_4.configure(pady="0")
-        self.SteamBtn_4.configure(relief="flat")
-        self.SteamBtn_4.configure(takefocus="0")
-
-        self.SteamBtn_13 = tk.Button(top)
-        self.SteamBtn_13.place(relx=0.64, rely=0.178, height=64, width=64)
-        self.SteamBtn_13.configure(activebackground="#2C2F33")
-        self.SteamBtn_13.configure(activeforeground="white")
-        self.SteamBtn_13.configure(activeforeground="#2C2F33")
-        self.SteamBtn_13.configure(background="#2C2F33")
-        self.SteamBtn_13.configure(cursor="hand2")
-        self.SteamBtn_13.configure(disabledforeground="#a3a3a3")
-        self.SteamBtn_13.configure(foreground="#000000")
-        self.SteamBtn_13.configure(highlightbackground="#d9d9d9")
-        self.SteamBtn_13.configure(highlightcolor="black")
-        photo_location = os.path.join(prog_location,"/Users/Ryan/Documents/PythonProjects/PyControlledLED/PyDashBoard/images/steamIcon.png")
-        global _img2
-        _img2 = tk.PhotoImage(file=photo_location)
-        self.SteamBtn_13.configure(image=_img2)
-        self.SteamBtn_13.configure(padx="0")
-        self.SteamBtn_13.configure(pady="0")
-        self.SteamBtn_13.configure(relief="flat")
-        self.SteamBtn_13.configure(takefocus="0")
+    def mediaLabel(self):
+        self.BacklightLbl_11 = tk.Label(self.TFrame2)
+        self.BacklightLbl_11.place(relx=0.0, rely=0.0, height=41, width=204)
+        self.BacklightLbl_11.configure(activebackground="#f9f9f9")
+        self.BacklightLbl_11.configure(activeforeground="black")
+        self.BacklightLbl_11.configure(background="#d9d9d9")
+        self.BacklightLbl_11.configure(disabledforeground="#a3a3a3")
+        self.BacklightLbl_11.configure(font="-family {Yu Gothic UI Semibold} -size 20 -weight bold")
+        self.BacklightLbl_11.configure(foreground="#000000")
+        self.BacklightLbl_11.configure(highlightbackground="#d9d9d9")
+        self.BacklightLbl_11.configure(highlightcolor="black")
+        self.BacklightLbl_11.configure(text='''Media''')
 
 
 if __name__ == '__main__':
     vp_start_gui()
-
